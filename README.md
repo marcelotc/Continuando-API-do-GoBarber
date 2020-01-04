@@ -1,1 +1,1 @@
-# Rocketseat-Bootcamp-Iniciando-back-end-do-GoBarber
+# Rocketseat-Bootcamp-Continuando-API-do-GoBarber
