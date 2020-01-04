@@ -1,0 +1,57 @@
+yarn init -y 
+
+yarn add express
+
+yarn add nodemon sucrase -D
+
+---------------------------------------------------------------------------------------------
+
+#Instalado Docker através do docker ce
+
+#Instalado imagem postgres através do docker hub com o comando:
+
+$: docker run --name database -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres:11
+
+#Comando para listar os containers :
+
+$: docker ps
+
+#Comando para para o container:
+
+$: docker stop database
+
+#Comando para listar os containers que tem na máquina mesmo os que não estão rodando:
+
+$: docker ps -a
+
+#Comando para iniciar container:
+
+$: docker start database
+
+#Comando para ver logs do container:
+
+$: docker logs database
+
+---------------------------------------------------------------------------------------------
+
+yarn add sequelize
+
+yarn add sequelize-cli -D
+
+yarn add pg pg-hstore
+
+yarn sequelize migration:create --name=create-users
+
+yarn sequelize db:migrate
+
+yarn sequelize db:migrate:undo
+
+yarn sequelize db:migrate:undo:all
+
+---------------------------------------------------------------------------------------------
+
+yarn add bcryptjs
+
+yarn add jsonwebtoken
+
+yarn add yup
