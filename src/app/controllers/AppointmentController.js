@@ -4,7 +4,8 @@ import File from '../models/File';
 import * as Yup from 'yup';
 import Notification from '../schemas/Notification';
 
-import Mail from '../../lib/Mail'; 
+import CancellationMail from '../jobs/CancellationMail';
+import Queue from '../../lib/Queue';
 
 import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
 import pt from 'date-fns/locale/pt';
@@ -54,7 +55,7 @@ class AppointmentController {
          * chech if provider is the same as loged user
          */
 
-        if(provider_id === req.userId){
+        if (provider_id === req.userId) {
             return res.status(400).json({ error: 'You can not set an appointment with yourself.' });
         }
 
@@ -148,7 +149,7 @@ class AppointmentController {
         //dateWithSub 11h
         //now: Horário no computador
 
-        if(isBefore(dateWithSub, new Date())){
+        if (isBefore(dateWithSub, new Date())) {
             return res.status(401).json({
                 error: 'You can only cancel appointments 2 hours in advance.'
             })
@@ -158,19 +159,8 @@ class AppointmentController {
 
         await appointment.save();
 
-        await Mail.sendMail({
-            to: `${appointment.provider.name} <${appointment.provider.email}>`,
-            subject: 'Agendamento cancelado',
-            template: 'cancellation',
-            context: {
-                provider: appointment.provider.name,
-                user: appointment.user.name,
-                date: format(
-                    appointment.date,
-                    "'dia' dd 'de' MMMM', às ' H:mm'h'",
-                    { locale: pt }
-                ),
-            }
+        await Queue.add(CancellationMail.key, {
+            appointment,
         });
 
         return res.json(appointment);
