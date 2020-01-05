@@ -49,6 +49,14 @@ class AppointmentController {
         const { provider_id, date } = req.body;
 
         /**
+         * chech if provider is the same as loged user
+         */
+
+        if(provider_id === req.userId){
+            return res.status(400).json({ error: 'You can not set an appointment with yourself.' });
+        }
+
+        /**
          * check if provider id is a provider
          */
 
